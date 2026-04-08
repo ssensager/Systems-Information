@@ -1,0 +1,28 @@
+@startuml
+!include C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(admin, "Администратор\n[Person]", "Управляет системой, настраивает пользователей и доступ")
+
+System_Ext(client, "Веб-клиент\n[External System]", "Интерфейс пользователя для работы с поручениями")
+
+System_Boundary(system, "КИС управления поручениями") {
+
+    Container(web, "Web Admin UI", "React", "Интерфейс администратора для управления системой")
+
+    Container(api, "Application API", "ASP.NET Core (C#)", "Обрабатывает бизнес-логику поручений")
+
+    ContainerDb(db, "Database", "PostgreSQL", "Хранит данные о поручениях, пользователях и сроках")
+
+}
+
+Rel(admin, web, "Работает через", "HTTPS")
+
+Rel(client, web, "Использует интерфейс", "HTTPS")
+
+Rel(web, api, "Отправляет запросы", "HTTPS/JSON")
+
+Rel(api, db, "Читает и записывает", "SQL")
+
+@enduml

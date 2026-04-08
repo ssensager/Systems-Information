@@ -1,0 +1,50 @@
+@startuml
+!include C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(api, "Сервер приложения") {
+
+    Component(api_controller, "Access API", "ASP.NET Core", "Принимает запросы на проверку доступа")
+
+    Component(admin_controller, "Admin API", "ASP.NET Core", "Управление политиками и хостами")
+
+    Component(decision_service, "Decision Service", "C#", "Принимает решение по доступу")
+
+    Component(policy_service, "Policy Service", "C#", "Работа с политиками доступа")
+
+    Component(audit_service, "Audit Service", "C#", "Логирование событий доступа")
+
+    Component(management_service, "Management Service", "C#", "Управление сущностями системы")
+
+    Component(policy_repo, "Policy Repository", "EF Core", "Доступ к данным политик")
+
+    Component(audit_repo, "Audit Repository", "EF Core", "Доступ к журналу")
+
+    Component(management_repo, "Management Repository", "EF Core", "Доступ к данным системы")
+
+}
+
+ContainerDb(db, "Database", "PostgreSQL", "Хранение данных системы")
+
+Rel(api_controller, decision_service, "Передаёт контекст запроса")
+
+Rel(decision_service, policy_service, "Запрашивает политики")
+
+Rel(policy_service, policy_repo, "Читает политики")
+
+Rel(decision_service, audit_service, "Передаёт результат")
+
+Rel(audit_service, audit_repo, "Записывает лог")
+
+Rel(admin_controller, management_service, "Управляет системой")
+
+Rel(management_service, management_repo, "Работа с данными")
+
+Rel(policy_repo, db, "Читает/пишет", "SQL")
+
+Rel(audit_repo, db, "Читает/пишет", "SQL")
+
+Rel(management_repo, db, "Читает/пишет", "SQL")
+
+@enduml

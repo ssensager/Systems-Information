@@ -1,0 +1,17 @@
+@startuml
+
+!include C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(admin, "Администратор\n[Person]", "Управляет системой, настраивает пользователей и доступ")
+
+System_Ext(client, "Веб-клиент\n[External System]", "Интерфейс пользователя для работы с поручениями")
+
+System(system, "КИС управления поручениями\n[System]", "Система управления поручениями и сроками")
+
+Rel(admin, system, "Настраивает систему", "HTTPS")
+
+Rel(client, system, "Работа с поручениями", "HTTPS/JSON")
+
+@enduml

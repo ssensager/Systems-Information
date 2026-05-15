@@ -19,8 +19,7 @@ public class UserRepositoryTests
     {
         DatabaseManager databaseManager = new();
 
-        _repository =
-            new UserRepository(databaseManager);
+        _repository = new UserRepository(databaseManager);
 
         TestHelper.CleanupUsers();
     }
@@ -35,24 +34,19 @@ public class UserRepositoryTests
         User user = new()
         {
             Username = "test_user",
-            PasswordHash =
-                PasswordHasher.HashPassword("12345"),
-            Email = "test@test.com"
+            PasswordHash = PasswordHasher.HashPassword("12345"),
+            Email = "test@test.com",
         };
 
         // Act
         int id = _repository.Create(user);
 
-        User? createdUser =
-            _repository.GetById(id);
+        User? createdUser = _repository.GetById(id);
 
         // Assert
         Assert.NotNull(createdUser);
 
-        Assert.Equal(
-            "test_user",
-            createdUser!.Username
-        );
+        Assert.Equal("test_user", createdUser!.Username);
     }
 
     /// <summary>
@@ -65,9 +59,8 @@ public class UserRepositoryTests
         User user = new()
         {
             Username = "reader",
-            PasswordHash =
-                PasswordHasher.HashPassword("12345"),
-            Email = "reader@test.com"
+            PasswordHash = PasswordHasher.HashPassword("12345"),
+            Email = "reader@test.com",
         };
 
         _repository.Create(user);
@@ -89,15 +82,13 @@ public class UserRepositoryTests
         User user = new()
         {
             Username = "before_update",
-            PasswordHash =
-                PasswordHasher.HashPassword("12345"),
-            Email = "before@test.com"
+            PasswordHash = PasswordHasher.HashPassword("12345"),
+            Email = "before@test.com",
         };
 
         int id = _repository.Create(user);
 
-        User? existingUser =
-            _repository.GetById(id);
+        User? existingUser = _repository.GetById(id);
 
         Assert.NotNull(existingUser);
 
@@ -106,21 +97,16 @@ public class UserRepositoryTests
         existingUser.Email = "updated@test.com";
 
         // Act
-        bool result =
-            _repository.Update(existingUser);
+        bool result = _repository.Update(existingUser);
 
-        User? updatedUser =
-            _repository.GetById(id);
+        User? updatedUser = _repository.GetById(id);
 
         // Assert
         Assert.True(result);
 
         Assert.NotNull(updatedUser);
 
-        Assert.Equal(
-            "updated_user",
-            updatedUser!.Username
-        );
+        Assert.Equal("updated_user", updatedUser!.Username);
     }
 
     /// <summary>
@@ -133,19 +119,16 @@ public class UserRepositoryTests
         User user = new()
         {
             Username = "delete_me",
-            PasswordHash =
-                PasswordHasher.HashPassword("12345"),
-            Email = "delete@test.com"
+            PasswordHash = PasswordHasher.HashPassword("12345"),
+            Email = "delete@test.com",
         };
 
         int id = _repository.Create(user);
 
         // Act
-        bool deleted =
-            _repository.Delete(id);
+        bool deleted = _repository.Delete(id);
 
-        User? deletedUser =
-            _repository.GetById(id);
+        User? deletedUser = _repository.GetById(id);
 
         // Assert
         Assert.True(deleted);

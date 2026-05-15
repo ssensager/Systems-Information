@@ -3,9 +3,10 @@ using LibraryManagementSystem.Console.Database;
 
 namespace LibraryManagementSystem.Tests;
 
-/// <summary>
-/// Вспомогательные методы для тестов.
-/// </summary>
+/// <remarks>
+/// Используется перед запуском тестов
+/// для очистки тестовых данных.
+/// </remarks>
 public static class TestHelper
 {
     /// <summary>
@@ -15,8 +16,7 @@ public static class TestHelper
     {
         DatabaseManager databaseManager = new();
 
-        using var connection =
-            databaseManager.CreateConnection();
+        using var connection = databaseManager.CreateConnection();
 
         connection.Execute(
             """

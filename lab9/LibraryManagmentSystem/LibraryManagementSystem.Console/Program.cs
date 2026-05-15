@@ -8,11 +8,9 @@ LoggerConfigurator.Configure();
 
 DatabaseManager databaseManager = new();
 
-IUserRepository userRepository =
-    new UserRepository(databaseManager);
+IUserRepository userRepository = new UserRepository(databaseManager);
 
-IBookRepository bookRepository =
-    new BookRepository(databaseManager);
+IBookRepository bookRepository = new BookRepository(databaseManager);
 
 while (true)
 {
@@ -68,6 +66,12 @@ while (true)
     }
 }
 
+/// <summary>
+/// Добавляет нового пользователя.
+/// </summary>
+/// <param name="repository">
+/// Репозиторий пользователей.
+/// </param>
 static void AddUser(IUserRepository repository)
 {
     try
@@ -84,40 +88,37 @@ static void AddUser(IUserRepository repository)
         User user = new()
         {
             Username = username,
-            PasswordHash =
-                PasswordHasher.HashPassword(password),
-            Email = email
+            PasswordHash = PasswordHasher.HashPassword(password),
+            Email = email,
         };
 
         int id = repository.Create(user);
 
-        System.Console.WriteLine(
-            $"User created. ID: {id}"
-        );
+        System.Console.WriteLine($"User created. ID: {id}");
     }
     catch (PostgresException ex)
     {
         if (ex.SqlState == "23505")
         {
-            System.Console.WriteLine(
-                "User with this username or email already exists."
-            );
+            System.Console.WriteLine("User with this username or email already exists.");
         }
         else
         {
-            System.Console.WriteLine(
-                $"Database error: {ex.Message}"
-            );
+            System.Console.WriteLine($"Database error: {ex.Message}");
         }
     }
     catch (Exception ex)
     {
-        System.Console.WriteLine(
-            $"Unexpected error: {ex.Message}"
-        );
+        System.Console.WriteLine($"Unexpected error: {ex.Message}");
     }
 }
 
+/// <summary>
+/// Отображает список пользователей.
+/// </summary>
+/// <param name="repository">
+/// Репозиторий пользователей.
+/// </param>
 static void ShowUsers(IUserRepository repository)
 {
     try
@@ -126,34 +127,30 @@ static void ShowUsers(IUserRepository repository)
 
         foreach (var user in users)
         {
-            System.Console.WriteLine(
-                $"{user.Id} | " +
-                $"{user.Username} | " +
-                $"{user.Email}"
-            );
+            System.Console.WriteLine($"{user.Id} | " + $"{user.Username} | " + $"{user.Email}");
         }
     }
     catch (Exception ex)
     {
-        System.Console.WriteLine(
-            $"Error loading users: {ex.Message}"
-        );
+        System.Console.WriteLine($"Error loading users: {ex.Message}");
     }
 }
 
+/// <summary>
+/// Обновляет данные пользователя.
+/// </summary>
+/// <param name="repository">
+/// Репозиторий пользователей.
+/// </param>
 static void UpdateUser(IUserRepository repository)
 {
     try
     {
         System.Console.Write("User ID: ");
 
-        if (!int.TryParse(
-                System.Console.ReadLine(),
-                out int id))
+        if (!int.TryParse(System.Console.ReadLine(), out int id))
         {
-            System.Console.WriteLine(
-                "Invalid ID format."
-            );
+            System.Console.WriteLine("Invalid ID format.");
 
             return;
         }
@@ -162,9 +159,7 @@ static void UpdateUser(IUserRepository repository)
 
         if (user is null)
         {
-            System.Console.WriteLine(
-                "User not found."
-            );
+            System.Console.WriteLine("User not found.");
 
             return;
         }
@@ -177,68 +172,60 @@ static void UpdateUser(IUserRepository repository)
 
         bool success = repository.Update(user);
 
-        System.Console.WriteLine(
-            success
-                ? "User updated."
-                : "Update failed."
-        );
+        System.Console.WriteLine(success ? "User updated." : "Update failed.");
     }
     catch (PostgresException ex)
     {
         if (ex.SqlState == "23505")
         {
-            System.Console.WriteLine(
-                "Username or email already exists."
-            );
+            System.Console.WriteLine("Username or email already exists.");
         }
         else
         {
-            System.Console.WriteLine(
-                $"Database error: {ex.Message}"
-            );
+            System.Console.WriteLine($"Database error: {ex.Message}");
         }
     }
     catch (Exception ex)
     {
-        System.Console.WriteLine(
-            $"Unexpected error: {ex.Message}"
-        );
+        System.Console.WriteLine($"Unexpected error: {ex.Message}");
     }
 }
 
+/// <summary>
+/// Удаляет пользователя.
+/// </summary>
+/// <param name="repository">
+/// Репозиторий пользователей.
+/// </param>
 static void DeleteUser(IUserRepository repository)
 {
     try
     {
         System.Console.Write("User ID: ");
 
-        if (!int.TryParse(
-                System.Console.ReadLine(),
-                out int id))
+        if (!int.TryParse(System.Console.ReadLine(), out int id))
         {
-            System.Console.WriteLine(
-                "Invalid ID format."
-            );
+            System.Console.WriteLine("Invalid ID format.");
 
             return;
         }
 
         bool success = repository.Delete(id);
 
-        System.Console.WriteLine(
-            success
-                ? "User deleted."
-                : "User not found."
-        );
+        System.Console.WriteLine(success ? "User deleted." : "User not found.");
     }
     catch (Exception ex)
     {
-        System.Console.WriteLine(
-            $"Delete error: {ex.Message}"
-        );
+        System.Console.WriteLine($"Delete error: {ex.Message}");
     }
 }
 
+/// <summary>
+/// Добавляет новую книгу.
+/// </summary>
+/// <param name="repository">
+/// Репозиторий книг.
+/// </param>
 static void AddBook(IBookRepository repository)
 {
     try
@@ -251,26 +238,18 @@ static void AddBook(IBookRepository repository)
 
         System.Console.Write("Year: ");
 
-        if (!int.TryParse(
-                System.Console.ReadLine(),
-                out int year))
+        if (!int.TryParse(System.Console.ReadLine(), out int year))
         {
-            System.Console.WriteLine(
-                "Invalid year format."
-            );
+            System.Console.WriteLine("Invalid year format.");
 
             return;
         }
 
         System.Console.Write("Owner ID: ");
 
-        if (!int.TryParse(
-                System.Console.ReadLine(),
-                out int ownerId))
+        if (!int.TryParse(System.Console.ReadLine(), out int ownerId))
         {
-            System.Console.WriteLine(
-                "Invalid owner ID."
-            );
+            System.Console.WriteLine("Invalid owner ID.");
 
             return;
         }
@@ -280,38 +259,36 @@ static void AddBook(IBookRepository repository)
             Title = title,
             Author = author,
             PublicationYear = year,
-            OwnerId = ownerId
+            OwnerId = ownerId,
         };
 
         int id = repository.Create(book);
 
-        System.Console.WriteLine(
-            $"Book created. ID: {id}"
-        );
+        System.Console.WriteLine($"Book created. ID: {id}");
     }
     catch (PostgresException ex)
     {
         if (ex.SqlState == "23503")
         {
-            System.Console.WriteLine(
-                "Owner with this ID does not exist."
-            );
+            System.Console.WriteLine("Owner with this ID does not exist.");
         }
         else
         {
-            System.Console.WriteLine(
-                $"Database error: {ex.Message}"
-            );
+            System.Console.WriteLine($"Database error: {ex.Message}");
         }
     }
     catch (Exception ex)
     {
-        System.Console.WriteLine(
-            $"Unexpected error: {ex.Message}"
-        );
+        System.Console.WriteLine($"Unexpected error: {ex.Message}");
     }
 }
 
+/// <summary>
+/// Отображает список книг.
+/// </summary>
+/// <param name="repository">
+/// Репозиторий книг.
+/// </param>
 static void ShowBooks(IBookRepository repository)
 {
     try
@@ -321,17 +298,15 @@ static void ShowBooks(IBookRepository repository)
         foreach (var book in books)
         {
             System.Console.WriteLine(
-                $"{book.Id} | " +
-                $"{book.Title} | " +
-                $"{book.Author} | " +
-                $"{book.PublicationYear}"
+                $"{book.Id} | "
+                    + $"{book.Title} | "
+                    + $"{book.Author} | "
+                    + $"{book.PublicationYear}"
             );
         }
     }
     catch (Exception ex)
     {
-        System.Console.WriteLine(
-            $"Error loading books: {ex.Message}"
-        );
+        System.Console.WriteLine($"Error loading books: {ex.Message}");
     }
 }

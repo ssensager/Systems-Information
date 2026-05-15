@@ -3,7 +3,7 @@ using LibraryManagementSystem.Console.Database;
 namespace LibraryManagementSystem.Tests;
 
 /// <summary>
-/// Тестирует подключение к БД.
+/// Проверяет успешное подключение к PostgreSQL.
 /// </summary>
 public class DatabaseTests
 {
@@ -14,15 +14,11 @@ public class DatabaseTests
         DatabaseManager databaseManager = new();
 
         // Act
-        using var connection =
-            databaseManager.CreateConnection();
+        using var connection = databaseManager.CreateConnection();
 
         // Assert
         Assert.NotNull(connection);
 
-        Assert.Equal(
-            System.Data.ConnectionState.Open,
-            connection.State
-        );
+        Assert.Equal(System.Data.ConnectionState.Open, connection.State);
     }
 }
